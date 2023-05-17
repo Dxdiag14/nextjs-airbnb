@@ -4,6 +4,8 @@ import Navbar from './components/Navbar/Navbar'
 import ClientOnly from './components/ClientOnly'
 import RegisterModal from './components/Modal/RegisterModal'
 import ToasterProvider from './providers/ToasterProvide'
+import LoginModal from './components/Modal/LoginModal'
+import getCurrentUser from './actions/getCurrentUser'
 
 export const metadata = {
   title: 'Airbnb',
@@ -21,11 +23,13 @@ const result = str.toLowerCase();
 console.log(result); // 👉️ ""
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const currentUser = await getCurrentUser()
+
   return (
     <html lang="en">
       {/*
@@ -36,8 +40,9 @@ export default function RootLayout({
       <body className={font.className}>
       <ClientOnly>
         <ToasterProvider />
+        <LoginModal />
         <RegisterModal />
-        <Navbar />
+        <Navbar currentUser={currentUser} />
       </ClientOnly>
         {children}
       </body>
